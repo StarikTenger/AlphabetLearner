@@ -8,6 +8,7 @@ class Framework:
         self.georgian_alphabet = "აბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ"
         self.letter_info = {letter: {'rating': 0, 'correct_count': 0, 'total_count': 0} for letter in self.georgian_alphabet}
         self.letter_to_word = {letter: set() for letter in self.georgian_alphabet}
+        self.letter_raiting_boundary = 5
 
     def load_words(self, filename):
         with open(filename, 'r', encoding='utf-8') as file:
@@ -50,11 +51,21 @@ class Framework:
         
         for letter in correct:
             self.letter_info[letter]['rating'] += 1
+            if self.letter_info[letter]['rating'] > self.letter_raiting_boundary:
+                self.letter_info[letter]['rating'] = self.letter_raiting_boundary
+            if self.letter_info[letter]['rating'] < -self.letter_raiting_boundary:
+                self.letter_info[letter]['rating'] = -self.letter_raiting_boundary
+                
             self.letter_info[letter]['correct_count'] += 1
             self.letter_info[letter]['total_count'] += 1
         
         for letter in incorrect:
             self.letter_info[letter]['rating'] -= 1
+            if self.letter_info[letter]['rating'] > self.letter_raiting_boundary:
+                self.letter_info[letter]['rating'] = self.letter_raiting_boundary
+            if self.letter_info[letter]['rating'] < -self.letter_raiting_boundary:
+                self.letter_info[letter]['rating'] = -self.letter_raiting_boundary
+                
             self.letter_info[letter]['total_count'] += 1
 
         print(f"Correct transliteration: {correct_transliteration}")
