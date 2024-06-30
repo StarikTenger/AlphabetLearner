@@ -51,6 +51,9 @@ def translit_double(russian_text):
 
 
 def is_correct_transliteration(georgian_text, russian_text):
+    # Quickfix for dealing with empty words
+    russian_text += ' ' * 20
+    
     # Transliterate the Georgian text to Russian
     transliterated_georgian = translit_rev(russian_text)
     
