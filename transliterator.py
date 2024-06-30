@@ -70,7 +70,8 @@ def is_correct_transliteration(georgian_text, russian_text):
             georgian_letter == 'ხ' and russian_letter == 'к' or \
             georgian_letter == 'ქ' and russian_letter == 'к' or \
             georgian_letter == 'კ' and russian_letter == 'к' or \
-            georgian_letter == 'ჭ' and russian_letter == 'ч':
+            georgian_letter == 'ჭ' and russian_letter == 'ч' or \
+            georgian_letter == 'ც' and russian_letter == 'ц':
             correct_letters.append(georgian_letter)
         else:
             incorrect_letters.append(georgian_letter)
