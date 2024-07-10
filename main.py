@@ -19,7 +19,7 @@ class Framework:
         self.letter_to_word = {letter: set() for letter in self.georgian_alphabet}
         self.letter_raiting_boundary_up = 5
         self.letter_raiting_boundary_down = -2
-        self.__debug_info__ = True
+        self.__debug_info__ = False
         self.letter_info_file = 'letter_info.data'
         self.load_or_initialize_letter_info()
         self.word_descriptions = {}
@@ -67,7 +67,8 @@ class Framework:
     
     def pick_word(self):
         letter, _ = self.find_lowest_rating_letter()
-        print(self.find_lowest_rating_letter())
+        if self.__debug_info__:
+            print(self.find_lowest_rating_letter())
         return random.choice(list(self.letter_to_word[letter]))
     
     def evaluate_word(self):
@@ -101,7 +102,7 @@ class Framework:
                 
             self.letter_info[letter]['total_count'] += 1
 
-        print(f"Correct transliteration: {correct_transliteration} - " + self.word_descriptions[word])
+        print(f"Correct transliteration:          {correct_transliteration} - " + self.word_descriptions[word])
         if incorrect:
             incorrect_letter_info = "\n".join([f"{letter} = {translit(letter)}" for letter in incorrect])
             print(f"{len(incorrect)} incorrect letters: \n{incorrect_letter_info}")
