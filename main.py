@@ -1,6 +1,10 @@
 from transliterator import *
 import random
 import re
+import pickle
+import os
+
+
 
 class Framework:
     def __init__(self, words=None):
@@ -8,7 +12,27 @@ class Framework:
         self.georgian_alphabet = "აბგდევზთიკლმნოპჟრსტუფქღყშჩცძწჭხჯჰ"
         self.letter_info = {letter: {'rating': 0, 'correct_count': 0, 'total_count': 0} for letter in self.georgian_alphabet}
         self.letter_to_word = {letter: set() for letter in self.georgian_alphabet}
-        self.letter_raiting_boundary = 5
+        self.letter_raiting_boundary_up = 5
+        self.letter_raiting_boundary_down = -2
+        self.__debug_info__ = True
+        self.letter_info_file = 'letter_info.data'
+        self.load_or_initialize_letter_info()
+
+    def dump_letters(self):
+        with open(self.letter_info_file, 'wb') as file:
+            pickle.dump(self.letter_info, file)
+    
+    def load_letters(self):
+        with open(self.letter_info_file, 'rb') as file:
+            self.letter_info = pickle.load(file)
+            
+    def load_or_initialize_letter_info(self):
+        if os.path.exists(self.letter_info_file):
+            self.load_letters()
+        else:
+            self.letter_info = {letter: {'rating': 0, 'correct_count': 0, 'total_count': 0} for letter in self.georgian_alphabet}
+            self.dump_letters()
+        
 
     def load_words(self, filename):
         with open(filename, 'r', encoding='utf-8') as file:
@@ -51,20 +75,20 @@ class Framework:
         
         for letter in correct:
             self.letter_info[letter]['rating'] += 1
-            if self.letter_info[letter]['rating'] > self.letter_raiting_boundary:
-                self.letter_info[letter]['rating'] = self.letter_raiting_boundary
-            if self.letter_info[letter]['rating'] < -self.letter_raiting_boundary:
-                self.letter_info[letter]['rating'] = -self.letter_raiting_boundary
+            if self.letter_info[letter]['rating'] > self.letter_raiting_boundary_up:
+                self.letter_info[letter]['rating'] = self.letter_raiting_boundary_up
+            if self.letter_info[letter]['rating'] < self.letter_raiting_boundary_down:
+                self.letter_info[letter]['rating'] = self.letter_raiting_boundary_down
                 
             self.letter_info[letter]['correct_count'] += 1
             self.letter_info[letter]['total_count'] += 1
         
         for letter in incorrect:
             self.letter_info[letter]['rating'] -= 1
-            if self.letter_info[letter]['rating'] > self.letter_raiting_boundary:
-                self.letter_info[letter]['rating'] = self.letter_raiting_boundary
-            if self.letter_info[letter]['rating'] < -self.letter_raiting_boundary:
-                self.letter_info[letter]['rating'] = -self.letter_raiting_boundary
+            if self.letter_info[letter]['rating'] > self.letter_raiting_boundary_up:
+                self.letter_info[letter]['rating'] = self.letter_raiting_boundary_up
+            if self.letter_info[letter]['rating'] < self.letter_raiting_boundary_down:
+                self.letter_info[letter]['rating'] = self.letter_raiting_boundary_down
                 
             self.letter_info[letter]['total_count'] += 1
 
@@ -75,7 +99,8 @@ class Framework:
         else:
             print("All letters were correct!")
         
-        self.display_letter_info()
+        if self.__debug_info__:
+            self.display_letter_info()
     
     def display_letter_info(self):
         for letter, info in self.letter_info.items():
@@ -86,6 +111,7 @@ class Framework:
         self.load_words("cities.txt") 
         while True:
             self.evaluate_word()
+            self.dump_letters()
 
 # Example usage
 framework = Framework([])
