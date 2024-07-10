@@ -4,7 +4,12 @@ import re
 import pickle
 import os
 
-
+def split_by_first_space(s):
+    parts = s.split(' ', 1)
+    if len(parts) == 2:
+        return parts[0], parts[1]
+    else:
+        return parts[0], ''
 
 class Framework:
     def __init__(self, words=None):
@@ -17,6 +22,7 @@ class Framework:
         self.__debug_info__ = True
         self.letter_info_file = 'letter_info.data'
         self.load_or_initialize_letter_info()
+        self.word_descriptions = {}
 
     def dump_letters(self):
         with open(self.letter_info_file, 'wb') as file:
@@ -38,7 +44,10 @@ class Framework:
         with open(filename, 'r', encoding='utf-8') as file:
             loaded_words = [line.strip() for line in file.readlines()]
             
-        for word in loaded_words:
+        for line in loaded_words:
+            word, description = split_by_first_space(line)
+            self.word_descriptions[word] = description
+            print(word)
             for letter in word:
                 self.letter_to_word[letter].add(word)
             
@@ -92,7 +101,7 @@ class Framework:
                 
             self.letter_info[letter]['total_count'] += 1
 
-        print(f"Correct transliteration: {correct_transliteration}")
+        print(f"Correct transliteration: {correct_transliteration} - " + self.word_descriptions[word])
         if incorrect:
             incorrect_letter_info = "\n".join([f"{letter} = {translit(letter)}" for letter in incorrect])
             print(f"{len(incorrect)} incorrect letters: \n{incorrect_letter_info}")
