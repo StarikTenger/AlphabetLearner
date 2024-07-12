@@ -62,7 +62,7 @@ function log_error(text) {
 function writeToLog(text, color) {
     const logContainer = document.getElementById('logContainer');
     const logEntry = document.createElement('p');
-    logEntry.textContent = text;
+    logEntry.innerHTML = text;
     if (color) {
         logEntry.style.color = color;
     }
@@ -104,7 +104,7 @@ function displayRandomWord() {
 }
 
 function validateTransliteration() {
-    const userInput = document.getElementById('textInput').value.trim();
+    const userInput = document.getElementById('textInput').value.trim().toLowerCase();
     const randomGeorgianWord = document.getElementById('randomGeorgianWord').textContent;
 
     if (!userInput) {
@@ -146,7 +146,13 @@ function validateTransliteration() {
     document.getElementById('textInput').value = replaceWord;
 
     if (isCorrect) {
-        log('All correct');
+        let message = '<div class="frame">';
+        message += '<b>Correct!</b><br/>';
+        message += '' + randomGeorgianWord + ' : '
+        message += '' + replaceWord + '<br/>'
+        message += '</div>';
+
+        log(message);
         displayRandomWord();
     } else {
         log_error(errorMessage);
