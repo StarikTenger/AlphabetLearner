@@ -67,6 +67,7 @@ function writeToLog(text, color) {
         logEntry.style.color = color;
     }
     logContainer.appendChild(logEntry);
+    logContainer.scrollTop = logContainer.scrollHeight; // Auto scroll to bottom
 }
 
 function logInput() {
@@ -97,6 +98,9 @@ function displayRandomWord() {
     if (wordDisplay) {
         wordDisplay.textContent = randomWord;
     }
+
+    // Clean user input
+    document.getElementById('textInput').value = "";
 }
 
 function validateTransliteration() {
@@ -110,16 +114,36 @@ function validateTransliteration() {
 
     let isCorrect = true;
     let errorMessage = 'Not correct. Errors:';
+    let i1 = 0;
+    let replaceWord = "";
+
     for (let i = 0; i < randomGeorgianWord.length; i++) {
         const georgianLetter = randomGeorgianWord[i];
         const expectedRussianLetter = transliterations.find(item => item.georgian === georgianLetter)?.russian;
-        const actualRussianLetter = userInput[i];
 
-        if (expectedRussianLetter !== actualRussianLetter) {
-            isCorrect = false;
-            errorMessage += ` ${georgianLetter} should be ${expectedRussianLetter},`;
+        let letter_correct = false;
+        let letters_read = 1;
+        for (; letters_read <= 2; letters_read++) {
+            const actualRussianLetter = userInput.substring(i1, i1 + letters_read);
+            if (expectedRussianLetter == actualRussianLetter) {
+                letter_correct = true;
+                replaceWord += actualRussianLetter;
+                break;
+            }
         }
+
+        if (!letter_correct) {
+            errorMessage += ` ${georgianLetter} should be ${expectedRussianLetter},`;
+            i1++;
+            replaceWord += "_";
+        } else {
+            i1 += letters_read;
+        }
+
+        isCorrect = isCorrect && letter_correct;
     }
+
+    document.getElementById('textInput').value = replaceWord;
 
     if (isCorrect) {
         log('All correct');
@@ -130,5 +154,3 @@ function validateTransliteration() {
 }
 
 displayRandomWord();
-log_warning("WARNING")
-log_error("ERROR")

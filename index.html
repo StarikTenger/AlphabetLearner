@@ -18,11 +18,20 @@
             align-items: flex-start; /* Align children to the start */
             height: 75%; /* 3/4 of the page height */
         }
+        .input-container {
+            margin: 0 40px; /* Add space on left and right */
+            text-align: center;
+        }
+        #randomGeorgianWord,
+        #textInput {
+            font-size: 24px; /* Set consistent font size */
+            font-weight: bold; /* Optional for better visibility */
+        }
         input[type="text"] {
             display: block;
             margin: 20px auto;
             padding: 10px;
-            font-size: 16px;
+            font-size: 24px; /* Match font size with Georgian word */
         }
         .table-container {
             height: 100%; /* Full height of the container */
@@ -50,6 +59,7 @@
             padding: 10px;
             background-color: #f9f9f9;
             width: 300px; /* Fixed width for the log container */
+            margin-left: 20px;
         }
     </style>
 </head>
@@ -63,9 +73,9 @@
                 </tr>
             </table>
         </div>
-        <div>
+        <div class="input-container">
             <p>Random Georgian Word:</p>
-            <p id="randomGeorgianWord" style="font-size: 24px; font-weight: bold;"></p>
+            <p id="randomGeorgianWord"></p>
             <form onsubmit="validateTransliteration(); return false;">
                 <label for="textInput">Enter transliteration:</label><br>
                 <input type="text" id="textInput" name="textInput" placeholder="Type here...">
