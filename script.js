@@ -1,4 +1,4 @@
-// script.js
+"use strict";
 
 const transliterations = [
     { georgian: 'ა', russian: 'а' },
