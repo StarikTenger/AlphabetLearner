@@ -1,5 +1,43 @@
 "use strict";
 
+class LetterInfo {
+    success_rate;
+    fail_rate;
+    raiting;
+    cell; // In html table
+
+    constructor(_cell) {
+        this.success_rate = 0;
+        this.fail_rate = 0;
+        this.raiting = 0;
+        this.cell = _cell;
+        this.update_cell();
+    }
+
+    // Increment raiting
+    inc_raiting() {
+        this.success_rate++;
+        //this.raiting += 1;
+        //this.raiting = Math.floor(this.raiting);
+        this.raiting = (this.raiting + 1) / 2;
+        this.update_cell();
+    }
+
+    // Decrement raiting
+    dec_raiting() {
+        this.fail_rate++;
+        this.raiting /= 2;
+        //this.raiting = Math.floor(this.raiting);
+        this.update_cell();
+    }
+
+    update_cell() {
+        this.cell.innerHTML = '<b>' + Math.round(this.raiting * 100) + '</b>'; 
+    }
+}
+
+let letterStats = {}
+
 const transliterations = [
     { georgian: 'ა', russian: 'а' },
     { georgian: 'ბ', russian: 'б' },
@@ -45,6 +83,8 @@ transliterations.forEach(({ georgian, russian }) => {
 
     georgianCell.textContent = georgian;
     russianCell.textContent = russian;
+
+    letterStats[georgian] = new LetterInfo(row.insertCell(2));
 });
 
 function log(text) {
@@ -74,75 +114,6 @@ function logInput() {
     const input = document.getElementById('textInput').value;
     log(input);
 }
-
-const georgianWords = [
-    'გამარჯობა', // Hello
-    'მადლობა',   // Thank you
-    'დიდი',       // Big
-    'გმადლობთ',   // Goodbye
-    'სამშობლო',   // Family
-    'დღეს',       // Today
-    'მეგობრის',   // Friend's
-    'რამდენი',    // How many
-    'მიწო',       // Earth
-    'პატარა',     // Small
-    // Cities
-    'თბილისი',
-    'ბათუმი',
-    'ქუთაისი',
-    'რუსთავი',
-    'გორი',
-    'ზუგდიდი',
-    'ფოთი',
-    'ხაშური',
-    'სამტრედია',
-    'სენაკი',
-    'ზესტაფონი',
-    'მარნეული',
-    'თელავი',
-    'ახალციხე',
-    'ქობულეთი',
-    'ოზურგეთი',
-    'კასპი',
-    'ჭიათურა',
-    'წყალტუბო',
-    'საგარეჯო',
-    'გარდაბანი',
-    'ბორჯომი',
-    'ტყიბული',
-    'ხონი',
-    'ბოლნისი',
-    'ახალქალაქი',
-    'გურჯაანი',
-    'მცხეთა',
-    'ყვარელი',
-    'ახმეტა',
-    'ქარელი',
-    'ლანჩხუთი',
-    'დუშეთი',
-    'საჩხერე',
-    'დედოფლისწყარო',
-    'ლაგოდეხი',
-    'ნინოწმინდა',
-    'აბაშა',
-    'წნორი',
-    'თერჯოლა',
-    'მარტვილი',
-    'ხობი',
-    'წალენჯიხა',
-    'ვანი',
-    'ბაღდათი',
-    'ვალე',
-    'ჩხოროწყუ',
-    'თეთრიწყარო',
-    'დმანისი',
-    'ონი',
-    'წალკა',
-    'ამბროლაური',
-    'სიღნაღი',
-    'ცაგერი',
-    'ჯვარი',
-];
 
 function getRandomWord() {
     return georgianWords[Math.floor(Math.random() * georgianWords.length)];
@@ -192,8 +163,11 @@ function validateTransliteration() {
             errorMessage += ` ${georgianLetter} should be ${expectedRussianLetter},`;
             i1++;
             replaceWord += "_";
+
+            letterStats[georgianLetter].dec_raiting();
         } else {
             i1 += letters_read;
+            letterStats[georgianLetter].inc_raiting();
         }
 
         isCorrect = isCorrect && letter_correct;
