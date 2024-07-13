@@ -133,6 +133,10 @@ function getRandomWord() {
     return georgianWords[Math.floor(Math.random() * georgianWords.length)];
 }
 
+// Set of positions in the word for which letter is already correctly guessed
+let solved_positions = {};
+let failed_positions = {};
+
 function displayRandomWord() {
     const randomWord = getRandomWord();
     const wordDisplay = document.getElementById('randomGeorgianWord');
@@ -142,10 +146,22 @@ function displayRandomWord() {
 
     // Clean user input
     document.getElementById('textInput').value = "";
+
+    // Clean set of solved positions
+    solved_positions = {};
+    failed_positions = {};
 }
+
+let userInputPrev = '\0';
 
 function validateTransliteration() {
     const userInput = document.getElementById('textInput').value.trim().toLowerCase();
+    if (userInput == userInputPrev) {
+        userInputPrev = userInput;
+        return;
+    }
+    userInputPrev = userInput;
+
     const randomGeorgianWord = document.getElementById('randomGeorgianWord').textContent;
 
     if (!userInput) {
@@ -155,7 +171,7 @@ function validateTransliteration() {
 
     let isCorrect = true;
     let errorMessage = 'Not correct. Errors:';
-    let i1 = 0;
+    let i1 = 0; // Scanning position in russian word
     let replaceWord = "";
 
     for (let i = 0; i < randomGeorgianWord.length; i++) {
@@ -177,11 +193,18 @@ function validateTransliteration() {
             errorMessage += `  ${georgianLetter} should be ${expectedRussianLetter},`;
             i1++;
             replaceWord += "_";
-
-            letterStats[georgianLetter].dec_raiting();
+            
+            if (!failed_positions[i]) {
+                letterStats[georgianLetter].dec_raiting();
+                failed_positions[i] = true;
+            }
         } else {
             i1 += letters_read;
-            letterStats[georgianLetter].inc_raiting();
+
+            if (!solved_positions[i]) {
+                letterStats[georgianLetter].inc_raiting();
+                solved_positions[i] = true;
+            }
         }
 
         isCorrect = isCorrect && letter_correct;
