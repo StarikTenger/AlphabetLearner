@@ -129,8 +129,37 @@ function logInput() {
     log(input);
 }
 
-function getRandomWord() {
-    return georgianWords[Math.floor(Math.random() * georgianWords.length)];
+// The average difficulty of the letter
+function wordDifficulty(word) {
+    let raitingAvg = 0;
+    for (let i = 0; i < word.length; i++) {
+        raitingAvg += letterStats[word[i]].raiting;
+    }
+    raitingAvg /= word.length;
+
+    return 1 - raitingAvg;
+}
+
+function pickWord() {
+    // Politics: pick some words, take the hardest
+    let chosenWord = '';
+    let wordsNumber = 20;
+    let peakDifficulty = -1;
+
+    for (let i = 0; i < wordsNumber; i++) {
+        let currentWord = 
+            georgianWords[Math.floor(Math.random() * georgianWords.length)];
+        let currentDiff = wordDifficulty(currentWord);
+        if (currentDiff > peakDifficulty) {
+            peakDifficulty = currentDiff;
+            chosenWord = currentWord;
+        }
+    }
+
+    console.log(peakDifficulty);
+    return chosenWord;
+
+    // georgianWords[Math.floor(Math.random() * georgianWords.length)];
 }
 
 // Set of positions in the word for which letter is already correctly guessed
@@ -138,7 +167,7 @@ let solved_positions = {};
 let failed_positions = {};
 
 function displayRandomWord() {
-    const randomWord = getRandomWord();
+    const randomWord = pickWord();
     const wordDisplay = document.getElementById('randomGeorgianWord');
     if (wordDisplay) {
         wordDisplay.textContent = randomWord;
@@ -201,7 +230,7 @@ function validateTransliteration() {
         } else {
             i1 += letters_read;
 
-            if (!solved_positions[i]) {
+            if (!solved_positions[i] && !failed_positions[i]) {
                 letterStats[georgianLetter].inc_raiting();
                 solved_positions[i] = true;
             }
