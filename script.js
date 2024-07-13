@@ -32,7 +32,21 @@ class LetterInfo {
     }
 
     update_cell() {
-        this.cell.innerHTML = '<b>' + Math.round(this.raiting * 100) + '</b>'; 
+        let raiting_normalized = Math.round(this.raiting * 100);
+
+        let col = '#BBBB00';
+        if (raiting_normalized < 30) {
+            col = 'red';
+        }
+
+        if (raiting_normalized > 70) {
+            col = 'green';
+        }
+
+        this.cell.innerHTML = 
+            '<div style="color: ' + col + '"><b>' + 
+            raiting_normalized + 
+            '</b></div>'; 
     }
 }
 
@@ -160,7 +174,7 @@ function validateTransliteration() {
         }
 
         if (!letter_correct) {
-            errorMessage += ` ${georgianLetter} should be ${expectedRussianLetter},`;
+            errorMessage += `  ${georgianLetter} should be ${expectedRussianLetter},`;
             i1++;
             replaceWord += "_";
 
