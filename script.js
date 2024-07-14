@@ -3,54 +3,104 @@
 class LetterInfo {
     success_rate;
     fail_rate;
-    raiting;
+    rating;
     cell; // In html table
 
     constructor(_cell) {
         this.success_rate = 0;
         this.fail_rate = 0;
-        this.raiting = 0;
+        this.rating = 0;
         this.cell = _cell;
         this.update_cell();
     }
 
-    // Increment raiting
-    inc_raiting() {
+    // Increment rating
+    inc_rating() {
         this.success_rate++;
-        //this.raiting += 1;
-        //this.raiting = Math.floor(this.raiting);
-        this.raiting = (this.raiting + 1) / 2;
+        //this.rating += 1;
+        //this.rating = Math.floor(this.rating);
+        this.rating = (this.rating + 1) / 2;
         this.update_cell();
     }
 
-    // Decrement raiting
-    dec_raiting() {
+    // Decrement rating
+    dec_rating() {
         this.fail_rate++;
-        this.raiting /= 2;
-        //this.raiting = Math.floor(this.raiting);
+        this.rating /= 2;
+        //this.rating = Math.floor(this.rating);
         this.update_cell();
     }
 
     update_cell() {
-        let raiting_normalized = Math.round(this.raiting * 100);
+        let rating_normalized = Math.round(this.rating * 100);
 
         let col = '#BBBB00';
-        if (raiting_normalized < 30) {
+        if (rating_normalized < 30) {
             col = 'red';
         }
 
-        if (raiting_normalized > 70) {
+        if (rating_normalized > 70) {
             col = 'green';
         }
 
         this.cell.innerHTML = 
             '<div style="color: ' + col + '"><b>' + 
-            raiting_normalized + 
+            rating_normalized + 
             '</b></div>'; 
+    }
+
+    toJSON() {
+        return {
+            success_rate: this.success_rate,
+            fail_rate: this.fail_rate,
+            rating: this.rating,
+        };
     }
 }
 
 let letterStats = {}
+
+function saveLetterStatsToLocalStorage() {
+    console.log("Saving to local storage");
+
+    const json = JSON.stringify(letterStats, (key, value) => {
+        if (value instanceof LetterInfo) {
+            return value.toJSON();
+        }
+        return value;
+    });
+    localStorage.setItem('letterStats', json);
+}
+
+function loadLetterStatsFromLocalStorage() {
+    console.log("Loading from local storage");
+
+    const json = localStorage.getItem('letterStats');
+    if (!json) {
+        return {};
+    }
+
+    const parsed = JSON.parse(json);
+
+    for (const key in parsed) {
+        if (parsed.hasOwnProperty(key)) {
+            console.log(key);
+            console.log(letterStats[key]);
+            console.log(parsed[key]);
+            if (letterStats[key].rating != undefined) {
+                letterStats[key].rating = parsed[key].rating;
+            }
+            letterStats[key].success_rate = parsed[key].success_rate;
+            letterStats[key].fail_rate = parsed[key].fail_rate;
+            console.log(letterStats[key]);
+
+            letterStats[key].update_cell();
+        }
+    }
+
+}
+
+
 
 const transliterations = [
     { georgian: 'ა', russian: 'а' },
@@ -90,6 +140,8 @@ const transliterations = [
 
 const table = document.getElementById('transliterationTable');
 
+
+
 transliterations.forEach(({ georgian, russian }) => {
     const row = table.insertRow();
     const georgianCell = row.insertCell(0);
@@ -100,6 +152,10 @@ transliterations.forEach(({ georgian, russian }) => {
 
     letterStats[georgian] = new LetterInfo(row.insertCell(2));
 });
+
+loadLetterStatsFromLocalStorage();
+
+
 
 function log(text) {
     writeToLog(text, '');
@@ -131,13 +187,13 @@ function logInput() {
 
 // The average difficulty of the letter
 function wordDifficulty(word) {
-    let raitingAvg = 0;
+    let ratingAvg = 0;
     for (let i = 0; i < word.length; i++) {
-        raitingAvg += letterStats[word[i]].raiting;
+        ratingAvg += letterStats[word[i]].rating;
     }
-    raitingAvg /= word.length;
+    ratingAvg /= word.length;
 
-    return 1 - raitingAvg;
+    return 1 - ratingAvg;
 }
 
 function pickWord() {
@@ -166,6 +222,8 @@ function pickWord() {
 let solved_positions = {};
 let failed_positions = {};
 
+let userInputPrev = '\0';
+
 function displayRandomWord() {
     const randomWord = pickWord();
     const wordDisplay = document.getElementById('randomGeorgianWord');
@@ -179,9 +237,8 @@ function displayRandomWord() {
     // Clean set of solved positions
     solved_positions = {};
     failed_positions = {};
+    userInputPrev = '\0';
 }
-
-let userInputPrev = '\0';
 
 function validateTransliteration() {
     const userInput = document.getElementById('textInput').value.trim().toLowerCase();
@@ -224,14 +281,14 @@ function validateTransliteration() {
             replaceWord += "_";
             
             if (!failed_positions[i]) {
-                letterStats[georgianLetter].dec_raiting();
+                letterStats[georgianLetter].dec_rating();
                 failed_positions[i] = true;
             }
         } else {
             i1 += letters_read;
 
             if (!solved_positions[i] && !failed_positions[i]) {
-                letterStats[georgianLetter].inc_raiting();
+                letterStats[georgianLetter].inc_rating();
                 solved_positions[i] = true;
             }
         }
@@ -239,6 +296,7 @@ function validateTransliteration() {
         isCorrect = isCorrect && letter_correct;
     }
 
+    saveLetterStatsToLocalStorage();
     document.getElementById('textInput').value = replaceWord;
 
     if (isCorrect) {
