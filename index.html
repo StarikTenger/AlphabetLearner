@@ -69,7 +69,7 @@
         }
 
         /* Media query for mobile devices */
-        @media (max-width: 768px) {
+        @media (orientation: portrait) {
             .container {
                 flex-direction: column; /* Stack elements vertically */
                 align-items: center;
@@ -89,6 +89,7 @@
             .log-container {
                 order: 2; /* Move log container below input container */
                 width: 80%;
+                min-height: 90px;
                 margin: 20px;
                 padding: 20px;
                 height: 20%; /* Reduce height to show more table */
@@ -96,7 +97,7 @@
             .table-container {
                 order: 3; /* Move table to the bottom */
                 width: 90%;
-                height: 60%; /* Increase height to show more of the table */
+                /*height: 60%; /* Increase height to show more of the table */
                 margin: 10px;
                 padding: 10px;
             }
