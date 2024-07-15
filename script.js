@@ -1,9 +1,9 @@
 "use strict";
 
 function colorText(text, col) {
-    return '<div style="color: ' + col + '"><b>' + 
+    return '<text style="color: ' + col + '"><b>' + 
             text + 
-            '</b></div>'; 
+            '</b></text>'; 
 }
 
 class LetterInfo {
@@ -244,6 +244,8 @@ function displayRandomWord() {
     userInputPrev = '\0';
 }
 
+let successStreak = 0;
+
 function validateTransliteration() {
     const userInput = document.getElementById('textInput').value.trim().toLowerCase();
     if (userInput == userInputPrev) {
@@ -304,8 +306,14 @@ function validateTransliteration() {
     document.getElementById('textInput').value = replaceWord;
 
     if (isCorrect) {
+        successStreak++;
+
         let message = '<div class="frame">';
-        message += colorText('<b>Верно!</b><br/>', 'green');
+        message += colorText('<b>Верно!</b>', 'green');
+        if (successStreak > 1) {
+            message += colorText(' x' + successStreak, '#00CC00');
+        }
+        message += '<br/>';
         message += '' + randomGeorgianWord + ' : '
         message += '' + replaceWord + '<br/>'
         message += '</div>';
@@ -313,6 +321,8 @@ function validateTransliteration() {
         log(message);
         displayRandomWord();
     } else {
+        successStreak = 0;
+
         log_error(errorMessage);
     }
 }
