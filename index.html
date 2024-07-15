@@ -77,20 +77,28 @@
             }
             .input-container {
                 order: 1; /* Keep input container at the top */
-                width: 90%;
-                margin: 20px 0;
+                width: 80%;
+                margin-left: 20px;
+                margin-right: 20px;
+                margin-top: 0;
+                margin-bottom: 0;
+                padding-bottom: 0;
+                /*padding: 20px;*/
+                align-self: center; /* Center the input container */
             }
             .log-container {
                 order: 2; /* Move log container below input container */
-                width: 90%;
-                margin: 10px 0;
+                width: 80%;
+                margin: 20px;
+                padding: 20px;
                 height: 20%; /* Reduce height to show more table */
             }
             .table-container {
                 order: 3; /* Move table to the bottom */
                 width: 90%;
                 height: 60%; /* Increase height to show more of the table */
-                margin: 10px 0;
+                margin: 10px;
+                padding: 10px;
             }
         }
     </style>
@@ -101,7 +109,7 @@
             <table id="transliterationTable">
                 <tr>
                     <th>Грузинская буква</th>
-                    <th>Русская буква</th>
+                    <th> буква</th>
                     <th>Рейтинг</th>
                 </tr>
             </table>
@@ -110,7 +118,7 @@
             <p id="randomGeorgianWord"></p>
             <form onsubmit="validateTransliteration(); return false;" autocomplete="off">
                 <label for="textInput">Русская транслитерация:</label><br>
-                <input type="text" id="textInput" name="textInput" placeholder="Введите текст...">
+                <input class="input-container" type="text" id="textInput" name="textInput" placeholder="Введите текст...">
                 <!-- <input type="submit" value="Submit"> -->
             </form>
         </div>
