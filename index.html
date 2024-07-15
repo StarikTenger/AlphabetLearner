@@ -15,26 +15,27 @@
         }
         .container {
             display: flex;
-            align-items: flex-start; /* Align children to the start */
-            height: 75%; /* 3/4 of the page height */
+            flex-direction: row; /* Default layout for larger screens */
+            align-items: flex-start;
+            height: 75%;
         }
         .input-container {
-            margin: 0 40px; /* Add space on left and right */
+            margin: 0 40px;
             text-align: center;
         }
         #randomGeorgianWord,
         #textInput {
-            font-size: 24px; /* Set consistent font size */
-            font-weight: bold; /* Optional for better visibility */
+            font-size: 24px;
+            font-weight: bold;
         }
         input[type="text"] {
             display: block;
             margin: 20px auto;
             padding: 10px;
-            font-size: 24px; /* Match font size with Georgian word */
+            font-size: 24px;
         }
         .table-container {
-            height: 100%; /* Full height of the container */
+            height: 100%;
             overflow-y: auto;
             margin-right: 20px;
         }
@@ -53,18 +54,44 @@
             background-color: #f2f2f2;
         }
         .log-container {
-            height: 100%; /* Full height of the container */
+            height: 100%;
             overflow-y: auto;
             border: 1px solid black;
             padding: 10px;
             background-color: #f9f9f9;
-            width: 300px; /* Fixed width for the log container */
+            width: 300px;
             margin-left: 20px;
         }
         .frame {
             border: 2px solid black;
             padding: 20px;
             margin: 10px;
+        }
+
+        /* Media query for mobile devices */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* Stack elements vertically */
+                align-items: center;
+                height: 100%; /* Full height for better usage on mobile */
+            }
+            .input-container {
+                order: 1; /* Keep input container at the top */
+                width: 90%;
+                margin: 20px 0;
+            }
+            .log-container {
+                order: 2; /* Move log container below input container */
+                width: 90%;
+                margin: 10px 0;
+                height: 20%; /* Reduce height to show more table */
+            }
+            .table-container {
+                order: 3; /* Move table to the bottom */
+                width: 90%;
+                height: 60%; /* Increase height to show more of the table */
+                margin: 10px 0;
+            }
         }
     </style>
 </head>
