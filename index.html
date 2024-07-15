@@ -100,23 +100,21 @@
         <div class="table-container">
             <table id="transliterationTable">
                 <tr>
-                    <th>Georgian Letter</th>
-                    <th>Russian Transliteration</th>
-                    <th>Raiting</th>
+                    <th>Грузинская буква</th>
+                    <th>Русская буква</th>
+                    <th>Рейтинг</th>
                 </tr>
             </table>
         </div>
         <div class="input-container">
-            <p>Random Georgian Word:</p>
             <p id="randomGeorgianWord"></p>
             <form onsubmit="validateTransliteration(); return false;" autocomplete="off">
-                <label for="textInput">Enter transliteration:</label><br>
-                <input type="text" id="textInput" name="textInput" placeholder="Type here...">
-                <input type="submit" value="Submit">
+                <label for="textInput">Русская транслитерация:</label><br>
+                <input type="text" id="textInput" name="textInput" placeholder="Введите текст...">
+                <!-- <input type="submit" value="Submit"> -->
             </form>
         </div>
         <div class="log-container" id="logContainer">
-            <p><strong>Log:</strong></p>
         </div>
     </div>
 

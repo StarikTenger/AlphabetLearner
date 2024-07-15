@@ -1,5 +1,11 @@
 "use strict";
 
+function colorText(text, col) {
+    return '<div style="color: ' + col + '"><b>' + 
+            text + 
+            '</b></div>'; 
+}
+
 class LetterInfo {
     success_rate;
     fail_rate;
@@ -44,9 +50,7 @@ class LetterInfo {
         }
 
         this.cell.innerHTML = 
-            '<div style="color: ' + col + '"><b>' + 
-            rating_normalized + 
-            '</b></div>'; 
+            colorText(rating_normalized, col);
     }
 
     toJSON() {
@@ -251,12 +255,12 @@ function validateTransliteration() {
     const randomGeorgianWord = document.getElementById('randomGeorgianWord').textContent;
 
     if (!userInput) {
-        log_error('Please enter a transliteration.');
+        log_error('Введите текст.');
         return;
     }
 
     let isCorrect = true;
-    let errorMessage = 'Not correct. Errors:';
+    let errorMessage = 'Исправьте следующие буквы: <br/>';
     let i1 = 0; // Scanning position in russian word
     let replaceWord = "";
 
@@ -276,7 +280,7 @@ function validateTransliteration() {
         }
 
         if (!letter_correct) {
-            errorMessage += `  ${georgianLetter} should be ${expectedRussianLetter},`;
+            errorMessage += `  ${georgianLetter} = ${expectedRussianLetter}, `;
             i1++;
             replaceWord += "_";
             
@@ -301,7 +305,7 @@ function validateTransliteration() {
 
     if (isCorrect) {
         let message = '<div class="frame">';
-        message += '<b>Correct!</b><br/>';
+        message += colorText('<b>Верно!</b><br/>', 'green');
         message += '' + randomGeorgianWord + ' : '
         message += '' + replaceWord + '<br/>'
         message += '</div>';
