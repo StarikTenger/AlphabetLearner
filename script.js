@@ -10,12 +10,14 @@ class LetterInfo {
     success_rate;
     fail_rate;
     rating;
+    locked; // If locked, tip is displayed 
     cell; // In html table
 
     constructor(_cell) {
         this.success_rate = 0;
         this.fail_rate = 0;
         this.rating = 0;
+        this.locked = true;
         this.cell = _cell;
         this.update_cell();
     }
@@ -49,8 +51,16 @@ class LetterInfo {
             col = 'green';
         }
 
-        this.cell.innerHTML = 
-            colorText(rating_normalized, col);
+        if (this.locked) {
+            this.cell.innerHTML = colorText('locked', 'brown');
+        } else {
+            this.cell.innerHTML = colorText(rating_normalized, col);
+        }
+    }
+
+    unlock() {
+        this.locked = false;
+        this.update_cell();
     }
 
     toJSON() {
@@ -58,6 +68,7 @@ class LetterInfo {
             success_rate: this.success_rate,
             fail_rate: this.fail_rate,
             rating: this.rating,
+            locked: this.locked,
         };
     }
 }
@@ -91,11 +102,15 @@ function loadLetterStatsFromLocalStorage() {
             console.log(key);
             console.log(letterStats[key]);
             console.log(parsed[key]);
-            if (letterStats[key].rating != undefined) {
+            if (parsed[key].rating != undefined) {
                 letterStats[key].rating = parsed[key].rating;
             }
             letterStats[key].success_rate = parsed[key].success_rate;
             letterStats[key].fail_rate = parsed[key].fail_rate;
+            if (parsed[key].locked != undefined) {
+                letterStats[key].locked = parsed[key].locked;
+                console.log('aaa');
+            }
             console.log(letterStats[key]);
 
             letterStats[key].update_cell();
