@@ -216,13 +216,19 @@ function unlockNext(n) {
         }
     }
 
+    let message = 'Разблокированы новые буквы! <br/>';
+
     for (let j = i; j < i + n; j++) {
         if (j >= letterArray.length) {
             console.log('unlocked all leters', j);
             break;
         }
         letterStats[letterArray[j]].unlock();
+
+        message += letterArray[j] + ' = ' + transliterations.find(item => item.georgian === letterArray[j])?.russian + ', ';
     }
+
+    log(colorText(message, 'green'));
 }
 
 function log(text) {
@@ -337,10 +343,13 @@ function checkNewLevel() {
     }
 
     unlockNext(5);
-    log(colorText('Новый уровень!', 'green'));
 }
 
 let successStreak = 0;
+
+if (letterStats[letterArray[0]].locked) {
+    unlockNext(5);
+}
 
 function validateTransliteration() {
     const userInput = document.getElementById('textInput').value.trim().toLowerCase();
