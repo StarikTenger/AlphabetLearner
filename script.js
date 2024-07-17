@@ -59,6 +59,7 @@ class LetterInfo {
     }
 
     unlock() {
+        this.rating = 0;
         this.locked = false;
         this.update_cell();
     }
@@ -257,6 +258,22 @@ function displayRandomWord() {
     solved_positions = {};
     failed_positions = {};
     userInputPrev = '\0';
+
+    // Display tip
+    let tipMessage = '';
+    for (let i = 0; i < randomWord.length; i++) {
+        const georgianLetter = randomWord[i];
+        const expectedRussianLetter = transliterations.find(item => item.georgian === georgianLetter)?.russian;
+
+        if (letterStats[georgianLetter].locked) {
+            tipMessage += georgianLetter + ' = ' + expectedRussianLetter;
+            if (i != randomWord.length - 1) {
+                tipMessage += ', ';
+            }
+        }
+    }
+    log(colorText(tipMessage, 'brown'));
+    console.log(tipMessage);
 }
 
 let successStreak = 0;
@@ -281,6 +298,8 @@ function validateTransliteration() {
     let i1 = 0; // Scanning position in russian word
     let replaceWord = "";
 
+
+    // Correctness check
     for (let i = 0; i < randomGeorgianWord.length; i++) {
         const georgianLetter = randomGeorgianWord[i];
         const expectedRussianLetter = transliterations.find(item => item.georgian === georgianLetter)?.russian;
