@@ -12,12 +12,14 @@ class LetterInfo {
     rating;
     locked; // If locked, tip is displayed 
     cell; // In html table
+    frequency;
 
     constructor(_cell) {
         this.success_rate = 0;
         this.fail_rate = 0;
         this.rating = 0;
         this.locked = true;
+        this.frequency = 0;
         this.cell = _cell;
         this.update_cell();
     }
@@ -42,16 +44,21 @@ class LetterInfo {
     update_cell() {
         let rating_normalized = Math.round(this.rating * 100);
 
-        let col = '#BBBB00';
+        let col = '#FFBB00';
         if (rating_normalized < 30) {
             col = 'red';
         }
 
         if (rating_normalized > 70) {
+            col = '#BBBB00';
+        }
+
+        if (rating_normalized > 95) {
             col = 'green';
         }
 
         if (this.locked) {
+            this.rating = 0;
             this.cell.innerHTML = colorText('locked', 'brown');
         } else {
             this.cell.innerHTML = colorText(rating_normalized, col);
@@ -161,6 +168,7 @@ const transliterations = [
 const table = document.getElementById('transliterationTable');
 
 
+// Initilaize letters
 
 transliterations.forEach(({ georgian, russian }) => {
     const row = table.insertRow();
@@ -175,7 +183,47 @@ transliterations.forEach(({ georgian, russian }) => {
 
 loadLetterStatsFromLocalStorage();
 
+function processWords() {
+    for (let i = 0; i < georgianWords.length; i++) {
+        let word = georgianWords[i];
+        for (let j = 0; j < word.length; j++) {
+            letterStats[word[j]].frequency++;
+        }
+    }
+}
 
+processWords();
+
+function sortKeysByFrequency(letterInfoObj) {
+    // Convert the object entries to an array
+    const letterInfoEntries = Object.entries(letterInfoObj);
+
+    // Sort the array by frequency
+    letterInfoEntries.sort((a, b) => b[1].frequency - a[1].frequency);
+
+    // Extract and return the sorted keys
+    return letterInfoEntries.map(entry => entry[0]);
+}
+
+let letterArray = sortKeysByFrequency(letterStats);
+
+// Unlock n next letterss
+function unlockNext(n) {
+    let i = 0;
+    for (; i < letterArray.length; i++) {
+        if (letterStats[letterArray[i]].locked) {
+            break;
+        }
+    }
+
+    for (let j = i; j < i + n; j++) {
+        if (j >= letterArray.length) {
+            console.log('unlocked all leters', j);
+            break;
+        }
+        letterStats[letterArray[j]].unlock();
+    }
+}
 
 function log(text) {
     writeToLog(text, '');
@@ -208,10 +256,14 @@ function logInput() {
 // The average difficulty of the letter
 function wordDifficulty(word) {
     let ratingAvg = 0;
+    let count = 0;
     for (let i = 0; i < word.length; i++) {
-        ratingAvg += letterStats[word[i]].rating;
+        if (!letterStats[word[i]].locked) {
+            ratingAvg += letterStats[word[i]].rating;
+            count++;
+        }
     }
-    ratingAvg /= word.length;
+    ratingAvg /= count;
 
     return 1 - ratingAvg;
 }
@@ -272,8 +324,20 @@ function displayRandomWord() {
             }
         }
     }
-    log(colorText(tipMessage, 'brown'));
+    log(colorText(tipMessage, '#0055AA'));
     console.log(tipMessage);
+}
+
+function checkNewLevel() {
+    for (let i = 0; i < letterArray.length; i++) {
+        if (!letterStats[letterArray[i]].locked && 
+            letterStats[letterArray[i]].rating < 0.95) {
+                return;
+            }
+    }
+
+    unlockNext(5);
+    log(colorText('Новый уровень!', 'green'));
 }
 
 let successStreak = 0;
@@ -353,6 +417,8 @@ function validateTransliteration() {
         message += '</div>';
 
         log(message);
+        
+        checkNewLevel();
         displayRandomWord();
     } else {
         successStreak = 0;
