@@ -61,7 +61,7 @@ class LetterInfo {
 
         if (this.locked) {
             this.rating = 0;
-            this.cell.innerHTML = colorText('locked', 'brown');
+            this.cell.innerHTML = colorText('🔒', 'brown');
         } else {
             this.cell.innerHTML = colorText(rating_normalized, col);
         }
@@ -332,7 +332,7 @@ function displayRandomWord() {
     userInputPrev = '\0';
 
     // Display tip
-    let tipMessage = '';
+    let tipMessage = 'Подсказка: <br>';
     for (let i = 0; i < randomWord.length; i++) {
         const georgianLetter = randomWord[i];
         const expectedRussianLetter = transliterations.find(item => item.georgian === georgianLetter)?.russian;
