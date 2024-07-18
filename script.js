@@ -6,6 +6,8 @@ function colorText(text, col) {
             '</b></text>'; 
 }
 
+let letterThreshold = 0.95;
+
 class LetterInfo {
     success_rate;
     fail_rate;
@@ -53,7 +55,7 @@ class LetterInfo {
             col = '#BBBB00';
         }
 
-        if (rating_normalized > 95) {
+        if (rating_normalized > letterThreshold * 100) {
             col = 'green';
         }
 
@@ -349,7 +351,7 @@ function displayRandomWord() {
 function checkNewLevel() {
     for (let i = 0; i < letterArray.length; i++) {
         if (!letterStats[letterArray[i]].locked && 
-            letterStats[letterArray[i]].rating < 0.95) {
+            letterStats[letterArray[i]].rating < letterThreshold) {
                 return;
             }
     }
@@ -362,6 +364,44 @@ let successStreak = 0;
 if (letterStats[letterArray[0]].locked) {
     unlockNext(5);
 }
+
+function findLowestRatedUnlockedLetters() {
+    // Filter out locked letters
+    let unlockedLetters = Object.keys(letterStats).filter(letter => !letterStats[letter].locked);
+    
+    // Sort unlocked letters by rating
+    unlockedLetters.sort((a, b) => letterStats[a].rating - letterStats[b].rating);
+    
+    // Get the 5 letters with the lowest rating
+    let lowestRatedLetters = unlockedLetters.slice(0, 5);
+    //let lowestRatedLetters = unlockedLetters;
+    
+    return lowestRatedLetters;
+}
+
+function calcSteps(x) {
+    if (x > letterThreshold) {
+        x = letterThreshold;
+    }
+    return Math.ceil(Math.log2((1 - x) / (1 - letterThreshold)));
+}
+
+function progressBar() {
+    let letters = findLowestRatedUnlockedLetters();
+    let stepsForAll = calcSteps(0) * letters.length;
+
+    let acc = 0;
+    for (let i = 0; i < letters.length; i++) {
+        acc += calcSteps(letterStats[letters[i]].rating);
+        console.log(letters[i], calcSteps(letterStats[letters[i]].rating));
+    }
+
+    console.log('acc =', acc);
+    console.log('stepsForAll =', stepsForAll);
+    document.getElementById('bar').value = (1 - acc / stepsForAll) * 100;
+}
+
+progressBar();
 
 function validateTransliteration() {
     const userInput = document.getElementById('textInput').value.trim().toLowerCase();
@@ -421,6 +461,7 @@ function validateTransliteration() {
         isCorrect = isCorrect && letter_correct;
     }
 
+
     saveLetterStatsToLocalStorage();
     document.getElementById('textInput').value = replaceWord;
 
@@ -446,6 +487,8 @@ function validateTransliteration() {
 
         log_error(errorMessage);
     }
+
+    progressBar();
 }
 
 displayRandomWord();
