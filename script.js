@@ -274,6 +274,12 @@ function wordDifficulty(word) {
     return 1 - ratingAvg;
 }
 
+let wordLastOccurence = {};
+
+for (let i = 0; i < georgianWords.length; i++) {
+    wordLastOccurence[georgianWords[i]] = 100;
+}
+
 function pickWord() {
     // Politics: pick some words, take the hardest
     let chosenWord = '';
@@ -284,13 +290,19 @@ function pickWord() {
         let currentWord = 
             georgianWords[Math.floor(Math.random() * georgianWords.length)];
         let currentDiff = wordDifficulty(currentWord);
-        if (currentDiff > peakDifficulty) {
+        if (currentDiff > peakDifficulty && wordLastOccurence[currentWord] > 4) {
             peakDifficulty = currentDiff;
             chosenWord = currentWord;
         }
     }
 
     console.log(peakDifficulty);
+
+    for (let i = 0; i < georgianWords.length; i++) {
+        wordLastOccurence[georgianWords[i]]++;
+    }
+    wordLastOccurence[chosenWord] = 0;
+
     return chosenWord;
 
     // georgianWords[Math.floor(Math.random() * georgianWords.length)];
