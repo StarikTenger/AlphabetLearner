@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter Input Fields</title>
+    <style>
+        .letter-input {
+            width: 20px;
+            height: 30px;
+            margin: 5px;
+            text-align: center;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Input Field for Each Letter</h1>
+    <label for="wordSize">Enter Word Size: </label>
+    <input type="number" id="wordSize" min="1">
+    <button onclick="createFields()">Generate Fields</button>
+    <div id="inputContainer"></div>
+
+    <script>
+        const validCombinations = ['sh', 'ch'];
+
+        function generateInputFields(wordSize) {
+            const inputContainer = document.getElementById('inputContainer');
+            inputContainer.innerHTML = ''; // Clear previous input fields
+
+            for (let i = 0; i < wordSize; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.maxLength = 2; // Allow only 1 character initially
+                input.className = 'letter-input';
+                input.id = 'input' + i;
+
+                // Event listener to move focus to the next input
+                input.addEventListener('input', function() {
+                    console.log('input');
+                    const value = input.value.toLowerCase();
+                    const nextIndex = i + 1;
+
+                    if (nextIndex < wordSize && value != '') {
+                        const nextInput = document.getElementById('input' + nextIndex);
+                        nextInput.focus();
+
+                        if (i > 0) {
+                            const prevInput = document.getElementById('input' + (i - 1));
+                            const combinedValue = prevInput.value + value;
+
+                            if (validCombinations.includes(combinedValue)) {
+                                prevInput.value = combinedValue;
+                                input.value = '';
+                                input.focus();
+                            }
+                        }
+                    }
+                });
+
+                // Event listener to handle backspace key
+                input.addEventListener('keydown', function(event) {
+                    if (event.key === 'Backspace' && i > 0) {
+                        console.log('backspace');
+                        const prevInput = document.getElementById('input' + (i - 1));
+                        prevInput.value = prevInput.value[0] || ''; // Remove the second character if it exists
+                        prevInput.focus();
+                    }
+                });
+
+                inputContainer.appendChild(input);
+            }
+        }
+
+        function createFields() {
+            const wordSize = document.getElementById('wordSize').value;
+            if (wordSize && wordSize > 0) {
+                generateInputFields(wordSize);
+            } else {
+                alert('Please enter a valid word size.');
+            }
+        }
+    </script>
+</body>
+</html>
