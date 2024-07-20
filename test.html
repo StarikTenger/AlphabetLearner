@@ -55,6 +55,7 @@
 
                     if (nextIndex < wordSize && value != '') {
                         const nextInput = document.getElementById('input' + nextIndex);
+                        nextInput.value = '';
                         nextInput.focus();
                     }
 
@@ -75,9 +76,16 @@
                     if (event.key === 'Backspace' && i > 0) {
                         console.log('backspace');
                         const prevInput = document.getElementById('input' + (i - 1));
-                        prevInput.value = prevInput.value[0] || ''; // Remove the second character if it exists
+                        //prevInput.value = prevInput.value[0] || ''; // Remove the second character if it exists
+                        input.value = '';
                         prevInput.focus();
                     }
+                });
+
+
+                input.addEventListener('focus', function(event) {
+                    console.log(event);
+                    input.value = '';
                 });
 
                 inputContainer.appendChild(input);
