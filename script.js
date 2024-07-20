@@ -324,7 +324,10 @@ function displayRandomWord() {
     }
 
     // Clean user input
-    document.getElementById('textInput').value = "";
+    //document.getElementById('textInput').value = "";
+
+    generateInputFields(randomWord.length);
+    document.getElementById('input0').focus();
 
     // Clean set of solved positions
     solved_positions = {};
@@ -342,6 +345,9 @@ function displayRandomWord() {
             if (i != randomWord.length - 1) {
                 tipMessage += ', ';
             }
+            document.getElementById('input' + i).value = expectedRussianLetter;
+            document.getElementById('input' + i).style['backgroundColor'] = '#aaaaaa';
+            document.getElementById('input' + i).disabled = true;
         }
     }
     log(colorText(tipMessage, '#0055AA'));
@@ -403,24 +409,18 @@ function progressBar() {
 
 progressBar();
 
+function getLetterFromInput(i) {
+    return document.getElementById('input' + i).value;
+}
+
 function validateTransliteration() {
-    const userInput = document.getElementById('textInput').value.trim().toLowerCase();
-    if (userInput == userInputPrev) {
-        userInputPrev = userInput;
-        return;
-    }
-    userInputPrev = userInput;
+    console.log("validate");
+
 
     const randomGeorgianWord = document.getElementById('randomGeorgianWord').textContent;
 
-    if (!userInput) {
-        log_error('Введите текст.');
-        return;
-    }
-
     let isCorrect = true;
     let errorMessage = 'Исправьте следующие буквы: <br/>';
-    let i1 = 0; // Scanning position in russian word
     let replaceWord = "";
 
 
@@ -429,20 +429,10 @@ function validateTransliteration() {
         const georgianLetter = randomGeorgianWord[i];
         const expectedRussianLetter = transliterations.find(item => item.georgian === georgianLetter)?.russian;
 
-        let letter_correct = false;
-        let letters_read = 1;
-        for (; letters_read <= 2; letters_read++) {
-            const actualRussianLetter = userInput.substring(i1, i1 + letters_read);
-            if (expectedRussianLetter == actualRussianLetter) {
-                letter_correct = true;
-                replaceWord += actualRussianLetter;
-                break;
-            }
-        }
+        let letter_correct = getLetterFromInput(i) === expectedRussianLetter;
 
         if (!letter_correct) {
             errorMessage += `  ${georgianLetter} = ${expectedRussianLetter}, `;
-            i1++;
             replaceWord += "_";
             
             if (!failed_positions[i]) {
@@ -450,11 +440,15 @@ function validateTransliteration() {
                 failed_positions[i] = true;
             }
         } else {
-            i1 += letters_read;
 
             if (!solved_positions[i] && !failed_positions[i]) {
                 letterStats[georgianLetter].inc_rating();
                 solved_positions[i] = true;
+            }
+
+            if (!letterStats[georgianLetter].locked) {
+                document.getElementById('input' + i).style['backgroundColor'] = '#aaffaa';
+                document.getElementById('input' + i).disabled = true;
             }
         }
 
@@ -463,7 +457,6 @@ function validateTransliteration() {
 
 
     saveLetterStatsToLocalStorage();
-    document.getElementById('textInput').value = replaceWord;
 
     if (isCorrect) {
         successStreak++;

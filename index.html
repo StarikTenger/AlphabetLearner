@@ -67,6 +67,40 @@
             padding: 20px;
             margin: 10px;
         }
+        .letter-input {
+            width: 40px;
+            height: 30px;
+            margin: 0;
+            padding: 0;
+            border: 1px solid #000; /* Border to define the input area */
+            text-align: center;
+            font-size: 10px;
+            line-height: normal; /* Ensure text is vertically centered */
+            box-sizing: border-box; /* Ensure padding and border are included in the width/height */
+            background-color: #fff; /* Ensure background color is white */
+            color: #000; /* Ensure text color is black */
+            display: inline-block;
+            z-index: 2;
+        }
+        .invisible {
+            width: 0;
+            height: 0;
+            border: none;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            z-index: 1;
+            /*visibility: hidden;*/
+        }
+        .word-input {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            white-space: nowrap;
+            overflow: scroll;
+        }
 
         /* Media query for mobile devices */
         @media (orientation: portrait) {
@@ -117,17 +151,17 @@
         </div>
         <div class="input-container">
             <p id="randomGeorgianWord"></p>
-            <form onsubmit="validateTransliteration(); return false;" autocomplete="off">
-                <label for="textInput">Русская транслитерация:</label><br>
-                <input class="input-container" type="text" id="textInput" name="textInput" placeholder="Введите текст...">
-                <!-- <input type="submit" value="Submit"> -->
-            </form>
+            <label for="textInput">Русская транслитерация:</label><br>
+            <!-- <input class="input-container" type="text" id="textInput" name="textInput" placeholder="Введите текст..."> -->
+            <div class="word-input" id="inputContainer"></div>
+            <!-- <input type="submit" value="Submit"> -->
             <progress id="bar" max="100" value="70"/>
         </div>
         <div class="log-container" id="logContainer">
         </div>
     </div>
 
+    <script src="createInput.js"></script>
     <script src="words.js"></script>
     <script src="script.js"></script>
 </body>
