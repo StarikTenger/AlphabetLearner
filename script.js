@@ -319,15 +319,25 @@ let userInputPrev = '\0';
 function displayRandomWord() {
     const randomWord = pickWord();
     const wordDisplay = document.getElementById('randomGeorgianWord');
+
+    let wordColored = '';
+    for (let i = 0; i < randomWord.length; i++) {
+        if (letterStats[randomWord[i]].locked) {
+            wordColored += colorText(randomWord[i], '#cccccc');
+        } else {
+            wordColored += randomWord[i];
+        }
+    }
+
     if (wordDisplay) {
-        wordDisplay.textContent = randomWord;
+        wordDisplay.innerHTML = wordColored;
     }
 
     // Clean user input
     //document.getElementById('textInput').value = "";
 
     generateInputFields(randomWord.length);
-    document.getElementById('input0').focus();
+    document.getElementById('input' + getNextIndex(-1)).focus();
 
     // Clean set of solved positions
     solved_positions = {};
