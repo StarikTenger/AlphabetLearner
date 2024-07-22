@@ -494,4 +494,11 @@ function validateTransliteration() {
     progressBar();
 }
 
+document.getElementById("resetButton").addEventListener("click", function() {
+    if (confirm("Вы уверены, что хотите сбросить прогресс?")) {
+        localStorage.clear();
+        location.reload();
+    }
+});
+
 displayRandomWord();
