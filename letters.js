@@ -77,7 +77,7 @@ class LetterInfo {
 
 
 let letterStats = {}
-let level = 1;
+let level = 0;
 
 function saveLetterStatsToLocalStorage() {
     console.log("Saving to local storage");
