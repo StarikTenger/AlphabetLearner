@@ -127,7 +127,7 @@ function displayRandomWord() {
 
         if (letterStats[georgianLetter].locked) {
             document.getElementById('input' + i).value = expectedRussianLetter;
-            document.getElementById('input' + i).style['backgroundColor'] = '#aaaaaa';
+            document.getElementById('input' + i).style.border = 'none';
             document.getElementById('input' + i).disabled = true;
         }
     }
@@ -228,6 +228,7 @@ function validateTransliteration() {
 
             if (!letterStats[georgianLetter].locked) {
                 document.getElementById('input' + i).style['backgroundColor'] = '#aaffaa';
+                document.getElementById('input' + i).style.border = 'none';
                 document.getElementById('input' + i).disabled = true;
                 document.getElementById('letter' + i).style.color = '#aaffaa';
             }

@@ -82,7 +82,8 @@ tr:hover {
     height: 40px;
     margin: 0px;
     padding: 0px;
-    border: 2px solid #007bff; /* Border to define the input area */
+    border: none;
+    border-bottom: 2px solid rgb(148, 148, 148);
     border-radius: 5px;
     text-align: center;
     line-height: normal; /* Ensure text is vertically centered */
@@ -93,6 +94,7 @@ tr:hover {
     z-index: 2;
     transition: all 0.3s ease; /* Плавный переход */
 }
+
 .letter-input:focus {
     border-color: #0056b3; /* Цвет границы при фокусе */
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Тень при фокусе */
