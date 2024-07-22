@@ -15,7 +15,7 @@ function getPrevIndex(i) {
     let prevIndex = i - 1;
     const georgianWord = document.getElementById('randomGeorgianWord').textContent;
     while (
-        prevIndex > 0 && 
+        prevIndex >= 0 && 
         letterStats[georgianWord[prevIndex]].locked
     ) prevIndex--;
 
