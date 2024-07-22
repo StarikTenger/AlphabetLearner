@@ -319,18 +319,17 @@ let userInputPrev = '\0';
 function displayRandomWord() {
     const randomWord = pickWord();
     const wordDisplay = document.getElementById('randomGeorgianWord');
+    wordDisplay.innerHTML = '';
 
     let wordColored = '';
     for (let i = 0; i < randomWord.length; i++) {
+        let letter = document.createElement('text');
+        letter.innerHTML = randomWord[i];
+        letter.id = 'letter' + i;
         if (letterStats[randomWord[i]].locked) {
-            wordColored += colorText(randomWord[i], '#cccccc');
-        } else {
-            wordColored += randomWord[i];
+            letter.style.color = '#cccccc';
         }
-    }
-
-    if (wordDisplay) {
-        wordDisplay.innerHTML = wordColored;
+        wordDisplay.appendChild(letter);
     }
 
     // Clean user input
@@ -441,15 +440,16 @@ function validateTransliteration() {
 
         let letter_correct = getLetterFromInput(i) === expectedRussianLetter;
 
-        if (!letter_correct) {
+        if (!letter_correct) { // Incorrect
             errorMessage += `  ${georgianLetter} = ${expectedRussianLetter}, `;
             replaceWord += "_";
+            document.getElementById('input' + i).value = '';
             
             if (!failed_positions[i]) {
                 letterStats[georgianLetter].dec_rating();
                 failed_positions[i] = true;
             }
-        } else {
+        } else { // Correct
 
             if (!solved_positions[i] && !failed_positions[i]) {
                 letterStats[georgianLetter].inc_rating();
@@ -459,6 +459,7 @@ function validateTransliteration() {
             if (!letterStats[georgianLetter].locked) {
                 document.getElementById('input' + i).style['backgroundColor'] = '#aaffaa';
                 document.getElementById('input' + i).disabled = true;
+                document.getElementById('letter' + i).style.color = '#aaffaa';
             }
         }
 
