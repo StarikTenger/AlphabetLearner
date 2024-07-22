@@ -16,7 +16,7 @@ function getPrevIndex(i) {
     let prevIndex = i - 1;
     const georgianWord = document.getElementById('randomGeorgianWord').textContent;
     while (
-        prevIndex > 0 && 
+        prevIndex >= 0 && 
         (letterStats[georgianWord[prevIndex]].locked ||
         document.getElementById('input' + prevIndex).disabled)
     ) prevIndex--;
@@ -60,14 +60,15 @@ function generateInputFields(wordSize) {
 
             if (i > 0) {
                 let prevIndex = getPrevIndex(i);
+                if (prevIndex >= 0) {
+                    const prevInput = document.getElementById('input' + (prevIndex));
+                    const combinedValue = prevInput.value + value;
 
-                const prevInput = document.getElementById('input' + (prevIndex));
-                const combinedValue = prevInput.value + value;
-
-                if (validCombinations.includes(combinedValue)) {
-                    prevInput.value = combinedValue;
-                    input.value = '';
-                    input.focus();
+                    if (validCombinations.includes(combinedValue)) {
+                        prevInput.value = combinedValue;
+                        input.value = '';
+                        input.focus();
+                    }
                 }
             }
         });
