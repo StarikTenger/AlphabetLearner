@@ -1,0 +1,145 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    background-color: #f0f0f0; /* Легкий фон */
+}
+.container {
+    display: flex;
+    flex-direction: row; /* Default layout for larger screens */
+    align-items: flex-start;
+    height: 75%;
+    background-color: #fff; /* Белый фон */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    border-radius: 10px; /* Закругленные углы */
+}
+.input-container {
+    margin: 0 40px;
+    text-align: center;
+}
+#randomGeorgianWord,
+#textInput {
+    font-size: 24px;
+    font-weight: bold;
+}
+input[type="text"] {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+}
+.table-container {
+    height: 100%;
+    overflow-y: auto;
+    margin-right: 20px;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+table, th, td {
+    border: 1px solid black;
+}
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background-color: #f2f2f2;
+}
+.log-container {
+    height: 100%;
+    overflow-y: auto;
+    border: 1px solid black;
+    padding: 10px;
+    background-color: #f9f9f9;
+    width: 300px;
+    margin-left: 20px;
+}
+.frame {
+    border: 2px solid black;
+    padding: 20px;
+    margin: 10px;
+}
+.letter-input {
+    width: 30px;
+    height: 40px;
+    margin: 0px;
+    padding: 0px;
+    border: 2px solid #007bff; /* Border to define the input area */
+    border-radius: 5px;
+    text-align: center;
+    line-height: normal; /* Ensure text is vertically centered */
+    box-sizing: border-box; /* Ensure padding and border are included in the width/height */
+    background-color: #fff; /* Ensure background color is white */
+    color: #333; /* Ensure text color is black */
+    display: inline-block;
+    z-index: 2;
+    transition: all 0.3s ease; /* Плавный переход */
+}
+.letter-input:focus {
+    border-color: #0056b3; /* Цвет границы при фокусе */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Тень при фокусе */
+    outline: none;
+}
+.invisible {
+    width: 0;
+    height: 0;
+    border: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+    /*visibility: hidden;*/
+}
+.word-input {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: center;
+}
+
+/* Media query for mobile devices */
+@media (orientation: portrait) {
+    .container {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: center;
+        height: 100%; /* Full height for better usage on mobile */
+    }
+    .input-container {
+        order: 1; /* Keep input container at the top */
+        width: 100%;
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        /*padding: 20px;*/
+        align-self: center; /* Center the input container */
+    }
+    .log-container {
+        order: 2; /* Move log container below input container */
+        width: 80%;
+        min-height: 90px;
+        margin: 20px;
+        padding: 20px;
+        height: 20%; /* Reduce height to show more table */
+    }
+    .table-container {
+        order: 3; /* Move table to the bottom */
+        width: 90%;
+        /*height: 60%; /* Increase height to show more of the table */
+        margin: 10px;
+        padding: 10px;
+    }
+}
