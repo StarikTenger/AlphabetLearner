@@ -77,6 +77,7 @@ class LetterInfo {
 
 
 let letterStats = {}
+let level = 1;
 
 function saveLetterStatsToLocalStorage() {
     console.log("Saving to local storage");
@@ -88,6 +89,7 @@ function saveLetterStatsToLocalStorage() {
         return value;
     });
     localStorage.setItem('letterStats', json);
+    localStorage.setItem('level', level);
 }
 
 function loadLetterStatsFromLocalStorage() {
@@ -118,6 +120,10 @@ function loadLetterStatsFromLocalStorage() {
 
             letterStats[key].update_cell();
         }
+    }
+
+    if (localStorage.getItem('level')) {
+        level = localStorage.getItem('level');
     }
 
 }
@@ -185,5 +191,3 @@ function sortKeysByFrequency(letterInfoObj) {
     // Extract and return the sorted keys
     return letterInfoEntries.map(entry => entry[0]);
 }
-
-let letterArray = sortKeysByFrequency(letterStats);

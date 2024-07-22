@@ -12,7 +12,7 @@
             <table id="transliterationTable">
                 <tr>
                     <th>Грузинская буква</th>
-                    <th> Русская буква</th>
+                    <th>Русская буква</th>
                     <th>Рейтинг</th>
                 </tr>
             </table>
@@ -20,11 +20,15 @@
         </div>
         <div class="input-container">
             <p id="randomGeorgianWord"></p>
+            
             <label for="textInput">Русская транслитерация:</label><br>
-            <!-- <input class="input-container" type="text" id="textInput" name="textInput" placeholder="Введите текст..."> -->
+
             <div class="word-input" id="inputContainer"></div>
-            <!-- <input type="submit" value="Submit"> -->
-            <progress id="bar" max="100" value="70"/>
+
+            <div class="progress-bar">
+                <b id="bar-outer" class="float-text">asdsa</b>
+                <div id="bar" class="progress-bar-inner" style="width: 0%;"></div>
+            </div>
         </div>
         <div class="log-container" id="logContainer">
             Введите слово в поле сверху.

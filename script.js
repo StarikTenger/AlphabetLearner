@@ -10,9 +10,12 @@ function processWords() {
 }
 
 processWords();
+let letterArray = sortKeysByFrequency(letterStats);
 
 // Unlock n next letterss
 function unlockNext(n) {
+    level++;
+
     let i = 0;
     for (; i < letterArray.length; i++) {
         if (letterStats[letterArray[i]].locked) {
@@ -141,6 +144,8 @@ function checkNewLevel() {
     unlockNext(5);
 }
 
+checkNewLevel();
+
 let successStreak = 0;
 
 if (letterStats[letterArray[0]].locked) {
@@ -180,7 +185,8 @@ function progressBar() {
 
     console.log('acc =', acc);
     console.log('stepsForAll =', stepsForAll);
-    document.getElementById('bar').value = (1 - acc / stepsForAll) * 100;
+    document.getElementById('bar').style.width = (1 - acc / stepsForAll) * 100 + '%';
+    document.getElementById('bar-outer').textContent = "Уровень " + level;
 }
 
 progressBar();
