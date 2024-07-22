@@ -5,7 +5,8 @@ function getNextIndex(i) {
     const georgianWord = document.getElementById('randomGeorgianWord').textContent;
     while (
         nextIndex < georgianWord.length && 
-        letterStats[georgianWord[nextIndex]].locked
+        (letterStats[georgianWord[nextIndex]].locked ||
+        document.getElementById('input' + nextIndex).disabled)
     ) nextIndex++;
 
     return nextIndex;
@@ -16,7 +17,8 @@ function getPrevIndex(i) {
     const georgianWord = document.getElementById('randomGeorgianWord').textContent;
     while (
         prevIndex > 0 && 
-        letterStats[georgianWord[prevIndex]].locked
+        (letterStats[georgianWord[prevIndex]].locked ||
+        document.getElementById('input' + prevIndex).disabled)
     ) prevIndex--;
 
     return prevIndex;
