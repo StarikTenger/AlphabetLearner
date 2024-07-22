@@ -337,7 +337,7 @@ function displayRandomWord() {
     //document.getElementById('textInput').value = "";
 
     generateInputFields(randomWord.length);
-    document.getElementById('input' + getNextIndex(-1)).focus();
+    focusFirstUnsolved();
 
     // Clean set of solved positions
     solved_positions = {};
@@ -489,6 +489,7 @@ function validateTransliteration() {
         successStreak = 0;
 
         log_error(errorMessage);
+        focusFirstUnsolved();
     }
 
     progressBar();

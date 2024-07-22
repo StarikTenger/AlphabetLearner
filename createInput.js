@@ -24,6 +24,11 @@ function getPrevIndex(i) {
     return prevIndex;
 }
 
+// Focuses first usolved letter
+function focusFirstUnsolved() {
+    document.getElementById('input' + getNextIndex(-1)).focus();
+}
+
 function generateInputFields(wordSize) {
     wordSize++;
     const inputContainer = document.getElementById('inputContainer');
