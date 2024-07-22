@@ -118,23 +118,16 @@ function displayRandomWord() {
     userInputPrev = '\0';
 
     // Display tip
-    let tipMessage = 'Подсказка: <br>';
     for (let i = 0; i < randomWord.length; i++) {
         const georgianLetter = randomWord[i];
         const expectedRussianLetter = transliterations.find(item => item.georgian === georgianLetter)?.russian;
 
         if (letterStats[georgianLetter].locked) {
-            tipMessage += georgianLetter + ' = ' + expectedRussianLetter;
-            if (i != randomWord.length - 1) {
-                tipMessage += ', ';
-            }
             document.getElementById('input' + i).value = expectedRussianLetter;
             document.getElementById('input' + i).style['backgroundColor'] = '#aaaaaa';
             document.getElementById('input' + i).disabled = true;
         }
     }
-    log(colorText(tipMessage, '#0055AA'));
-    console.log(tipMessage);
 }
 
 function checkNewLevel() {
@@ -220,6 +213,7 @@ function validateTransliteration() {
                 failed_positions[i] = true;
             }
         } else { // Correct
+            replaceWord += expectedRussianLetter;
 
             if (!solved_positions[i] && !failed_positions[i]) {
                 letterStats[georgianLetter].inc_rating();
@@ -242,7 +236,7 @@ function validateTransliteration() {
     if (isCorrect) {
         successStreak++;
 
-        let message = '<div class="frame">';
+        let message = '';
         message += colorText('<b>Верно!</b>', 'green');
         if (successStreak > 1) {
             message += colorText(' x' + successStreak, '#00CC00');
@@ -250,7 +244,6 @@ function validateTransliteration() {
         message += '<br/>';
         message += '' + randomGeorgianWord + ' : '
         message += '' + replaceWord + '<br/>'
-        message += '</div>';
 
         log(message);
         

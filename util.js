@@ -21,12 +21,13 @@ function log_error(text) {
 function writeToLog(text, color) {
     const logContainer = document.getElementById('logContainer');
     const logEntry = document.createElement('p');
+    logContainer.innerHTML = '';
     logEntry.innerHTML = text;
     if (color) {
         logEntry.style.color = color;
     }
     logContainer.appendChild(logEntry);
-    logContainer.scrollTop = logContainer.scrollHeight; // Auto scroll to bottom
+    
 }
 
 function logInput() {

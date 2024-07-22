@@ -64,13 +64,13 @@ tr:hover {
     background-color: #e1e1e1;
 }
 .log-container {
-    height: 100%;
-    overflow-y: auto;
-    border: 1px solid black;
-    padding: 10px;
-    background-color: #f9f9f9;
-    width: 300px;
-    margin-left: 20px;
+    display: flex;
+    flex-direction: row; /* Default layout for larger screens */
+    align-items: center;
+    height: 10%;
+    background-color: #fff; /* Белый фон */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    border-radius: 10px; /* Закругленные углы */
 }
 .frame {
     border: 2px solid black;
@@ -159,10 +159,10 @@ button:hover {
     .log-container {
         order: 2; /* Move log container below input container */
         width: 80%;
-        min-height: 90px;
+        min-height: 3%;
         margin: 20px;
         padding: 20px;
-        height: 20%; /* Reduce height to show more table */
+        height: 10%; /* Reduce height to show more table */
     }
     .table-container {
         order: 3; /* Move table to the bottom */
