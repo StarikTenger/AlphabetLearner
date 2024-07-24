@@ -4,6 +4,8 @@ function processWords() {
     for (let i = 0; i < georgianWords.length; i++) {
         let word = georgianWords[i];
         for (let j = 0; j < word.length; j++) {
+            console.log(word);
+            console.log(word[j]);
             letterStats[word[j]].frequency++;
         }
     }
@@ -250,7 +252,8 @@ function validateTransliteration() {
         }
         message += '<br/>';
         message += '' + randomGeorgianWord + ' : '
-        message += '' + replaceWord + '<br/>'
+        message += '' + capitalizeFirstLetter(replaceWord) + '<br/>'
+        message += wordDescriptions[randomGeorgianWord];
 
         log(message);
         

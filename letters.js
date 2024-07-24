@@ -71,7 +71,7 @@ class LetterInfo {
             fail_rate: this.fail_rate,
             rating: this.rating,
             locked: this.locked,
-        };
+        };  
     }
 }
 

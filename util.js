@@ -38,3 +38,10 @@ function logInput() {
 function getLetterFromInput(i) {
     return document.getElementById('input' + i).value;
 }
+
+function capitalizeFirstLetter(string) {
+    if (string.length === 0) {
+        return string; // Return the string as-is if it's empty
+    }
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
