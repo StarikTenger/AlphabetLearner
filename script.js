@@ -66,12 +66,13 @@ function pickWord() {
     let chosenWord = '';
     let wordsNumber = 20;
     let peakDifficulty = -1;
+    let nonRepeatBuffer = georgianWords.length / 2;
 
     for (let i = 0; i < wordsNumber; i++) {
         let currentWord = 
             georgianWords[Math.floor(Math.random() * georgianWords.length)];
         let currentDiff = wordDifficulty(currentWord);
-        if (currentDiff > peakDifficulty && wordLastOccurence[currentWord] > 4) {
+        if (currentDiff > peakDifficulty && wordLastOccurence[currentWord] >= nonRepeatBuffer) {
             peakDifficulty = currentDiff;
             chosenWord = currentWord;
         }
